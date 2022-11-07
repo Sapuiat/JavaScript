@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar Valores Aleatórios</title>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <h1>Gerador de número aleatório</h1>
+
+    <p>
+        Nós selecionamos um número entre 1 e 100, você tem 10 chances para acertar o valor, vamos falar se está próximo ou não.
+    </p>
+    
+    <div class="form">
+      <label for="guessField">Digite um valor: </label>
+      <input type="number" min="1" max="100" id="campoPalpite" class="guessField">
+      <input type="submit" value="Enviar valor" class="enviarPalpite" onclick="testarPalpite()">
+    </div>
+
+    <div class="resultParas">
+      <p class="palpites"></p>
+      <p class="ultimoResultado"></p>
+      <p class="baixoOuAlto"></p>
+    </div>
+
+   <script>
+        var contador = 0;
+        let randomNumero = Math.floor(Math.random() * 100) 
+        var palpites = document.getElementById("campoPalpite")
+        var acertou = document.querySelector("p.ultimoResultado")
+        var resultado = document.querySelector("div.resultParas")
+        let textoFinal = document.querySelector("p.ultimoResultado")
+        var baixoOuAlto = document.querySelector(".baixoOuAlto")
+        var historico = document.querySelector(".palpites")
+        var button = document.querySelector(".enviarPalpite")
+        let resetButton
+        function testarPalpite() {
+            var palpitesNumero = palpites.value
+            
+            historico.textContent += ` ${palpitesNumero}`
+            contador++
+            
+            if (contador == 10) {
+                gameOver()
+                acertou.textContent = "VOCÊ PERDEU"
+                acertou.style.backgroundColor = "red"
+                acertou.style.color = "white"
+                baixoOuAlto.style.display = "none"
+            } else  {
+                if (randomNumero > palpitesNumero) {
+                    baixoOuAlto.innerHTML = "Chute mais Baixo ↓"
+                    
+                } else if(randomNumero < palpitesNumero){
+                    baixoOuAlto.textContent = "Chute mais Alto ↑"
+                    
+                    
+                } else if (randomNumero == palpitesNumero) {
+                    acertou.textContent = "VOCÊ ACERTOU PARABÉNS"
+                    acertou.style.backgroundColor = "green"
+                    acertou.style.color = "white"
+                    baixoOuAlto.style.display = "none"
+                    vitoria()
+                }
+                
+            }
+            
+        }
+        
+        function gameOver() {
+            let botao = document.querySelector("input.enviarPalpite")       
+            textoFinal.innerHTML = "<span>Você perdeu</span>"
+            resetButton = document.createElement("button")
+            resultado.appendChild(resetButton)
+            resetButton.textContent = "Iniciar novo Jogo"
+            resetButton.addEventListener("click", resetGame)
+            palpites.disabled = "true"
+            button.disabled = "true"
+        }
+        function resetGame() {
+            randomNumero = Math.floor(Math.random() * 100)
+            contador = 0;
+            resultado.removeChild(resetButton)       
+            acertou.style.backgroundColor = "white"
+            acertou.innerHTML = ""
+            baixoOuAlto.textContent = ""
+            historico.innerHTML = ""
+            palpites.value = ""
+            baixoOuAlto.style.display = "inline"
+            palpites.focus()      
+            palpites.disabled = false
+            button.disabled = false
+        }
+        function vitoria() {
+            let botao = document.querySelector("input.enviarPalpite")
+            let textoFinal = document.querySelector("p.ultimoResultado")
+            textoFinal.innerHTML = "Você ganhou"
+            resetButton = document.createElement("button")         
+            resultado.appendChild(resetButton)
+            resetButton.textContent = "Iniciar novo Jogo"
+            resetButton.addEventListener("click", resetGame)
+            
+        }
+   </script>
+</body>
+</html>
